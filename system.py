@@ -412,3 +412,70 @@ def backtest(position_matrix,removehead,valid):
 		'maximumdd':maxdd,
 		'historicalhigh':hishighs}
 	return backtest_dict
+
+def validfy(position_matrix,removehead,valid):
+	ini = 100
+	assets_rec = [ini]
+	return_rec = []
+	hishighs = [ini]
+	dropdowns = []
+	backtestdates = [tdlist[removehead-1]]
+	totaloperate = 0
+	hishigh = ini
+
+	for d in range(len(position_matrix) - valid,len(temp_position_matrix)):
+		pricetag_bef = dataset['adjopenn'][d+removehead-1,0:]
+		pricetag_aft = dataset['adjopenn'][d+removehead,0:]
+
+		bef_pos = position_matrix[d-1]
+		aft_pos = position_matrix[d]
+		operate = bef_pos - aft_pos #前減後
+
+		if innerp(pricetag_bef,bef_pos)!= 0:
+			dailyreturn = innerp(pricetag_aft,bef_pos)/innerp(pricetag_bef,bef_pos)
+		else:
+			dailyreturn = 1
+
+		ini = ini*dailyreturn
+		assets_rec.append(ini)
+		return_rec.append(dailyreturn)
+		backtestdates.append(tdlist[d+removehead])
+
+		if assets_rec[d] > hishigh:
+			hishigh = assets_rec[d]
+		dropdown = (hishigh-assets_rec[d])/hishigh
+		dropdowns.append(dropdown)
+		hishighs.append(hishigh)
+
+	assets_rec = np.asarray(assets_rec)
+	return_rec = np.asarray(return_rec)-1
+	backtestdates = np.asarray(backtestdates)
+	hishighs = np.asarray(hishighs)
+	maxduration = 0
+	duration = 0
+	maxdd = 0
+
+	for dd in dropdowns:
+		if dd > 0:
+			duration = duration + 1
+		elif dd == 0:
+			duration = 0
+		if duration > maxduration:
+			maxduration = duration
+		if dd > maxdd:
+			maxdd = dd
+
+	annualgeo = ((assets_rec[len(assets_rec)-1]/assets_rec[0])**(240/len(return_rec))) - 1
+	annualstd = np.std(return_rec)*(240**0.5)
+	sharpe = annualgeo/annualstd
+	backtest_dict = {
+		'assets':assets_rec,
+		'return':return_rec,
+		'dates':backtestdates,
+		'annualyield':annualgeo,
+		'annualstd':annualstd,
+		'sharpe':sharpe,
+		'longestdd':maxduration,
+		'maximumdd':maxdd,
+		'historicalhigh':hishighs}
+	return backtest_dict
