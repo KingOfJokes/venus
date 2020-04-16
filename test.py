@@ -12,7 +12,7 @@ import system
 #%timeit compute_memview.compute(array_1, array_2, a, b, c)
 
 test = np.asarray([[6,2,3],[3,3,4],[3,2,5],[4,4,3],[6,4,5],[7,7,7],[6,3,5]])
-test2 = np.asarray([[7,3,4],[5,5,8],[4,5,9],[1,7,8],[7,7,1],[3,4,2],[5,5,5]])
+test2 = np.asarray([[7,3,4],[5,5,8],[4,5,9],[1,7,8],[7,7,1],[3,4,2],[5,5,np.nan]])
 
 '''
 tests = []
@@ -99,3 +99,5 @@ print(b)
 #print(c)
 d = system.rank(b)
 print(d)
+e = dgp.decay(test2,3)
+print(e)
