@@ -19,3 +19,7 @@ answer.py guidance:(以下步驟具有序性，要按照順序執行)
 1. backtest: 將部位轉化為績效、dashboard的函數
 2. in-sample/out-sample: 此處回測把測資切成了兩段，在最適化的時候通常會看IS，OS則是用來檢視策略是否具穩健性
 3. distribution: 可以了解每個部位帶來的損益情形，了解策略的獲利是否是由極端值而來(which is not a good news)
+
+-------
+1. Research field: 研究整體量化策略
+2. Individual Research: 觀察個股的歷史股性表現
